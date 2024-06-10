@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "lib": ["dom", "esnext"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./frontend/src/*"]
+    },
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "outDir": "./dist"
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    "./frontend/src/**/*.ts",
+    "./frontend/src/**/*.tsx",
+    "./frontend/src/**/*.vue",
+    "./frontend/src/**/*.d.ts",
+    "./backend/**/*.ts"
+  ]
+}
