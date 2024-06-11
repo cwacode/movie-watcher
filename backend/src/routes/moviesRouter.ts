@@ -1,9 +1,11 @@
 import express, { Request, Response, Router } from 'express';
-import { Client } from 'pg';
+import pg from 'pg';
+const { Client } = pg;
+
 
 const router: Router = express.Router();
 const client = new Client({
-    connectionString: process.env.PGURI
+    connectionString: 'postgres://postgres:yupter@localhost:5432/postgres'
 });
 client.connect();
 
@@ -12,20 +14,19 @@ router.get('/', async (req: Request, res: Response) => {
         const { rows } = await client.query('SELECT * FROM movies');
         res.json(rows);
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching movies:', error);
         res.status(500).send('Server error');
     }
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const { title, director, releaseDate } = req.body as { title: string; director: string; releaseDate: string };
+    const { name, year, genre } = req.body as { name: string; year: number; genre: string };
     try {
-        const result = await client.query('INSERT INTO movies (title, director, release_date) VALUES ($1, $2, $3) RETURNING *', [title, director, releaseDate]);
+        const result = await client.query('INSERT INTO movies (name, year, genre) VALUES ($1, $2, $3) RETURNING *', [name, year, genre]);
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error creating movie:', error);
         res.status(500).send('Server error');
     }
 });
-
 export default router;

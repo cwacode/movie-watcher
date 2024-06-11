@@ -1,21 +1,17 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-dotenv.config();
-import { Client } from 'pg';
 import authRouter from './src/routes/authRouter';
 import usersRouter from './src/routes/usersRouter';
 import moviesRouter from './src/routes/moviesRouter';
+import listRouter from './src/routes/listRouter';
+import pg from 'pg';
+dotenv.config();
 
-
-
-const connectionString = process.env.PGURI;
-if (!connectionString) {
-    throw new Error("Database connection string 'PGURI' is missing in .env file");
-}
+const { Client } = pg;
 
 const client = new Client({
-    connectionString: connectionString
+    connectionString: 'postgres://postgres:yupter@localhost:5432/postgres'
 });
 
 client.connect()
@@ -36,12 +32,12 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
-
+app.use(express.static('public'));
 app.use(express.json());
 app.use('/api/users', usersRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/auth', authRouter);
-
+app.use('/api/list', listRouter);
 
 app.listen(3000, () => {
     console.log('Server running on port 3000.');

@@ -1,20 +1,17 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "lib": ["dom", "esnext"],
+    "lib": ["dom", "ESNext"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
     "strict": true,
-    "jsx": "preserve",
     "sourceMap": true,
-    "baseUrl": ".",
-    "types": ["node", "vuetify"],
+    "baseUrl": "./",
+    "types": ["node", "vue", "vuetify"],
     "paths": {
       "@/*": ["./frontend/src/*"]
     },

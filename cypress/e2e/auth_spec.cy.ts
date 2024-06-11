@@ -34,7 +34,7 @@ describe('Authentication Tests', () => {
       cy.get('[data-cy="Username"]').type('testuser');
       cy.get('[data-cy="Password"]').type('testpassword');
       cy.get('form').submit();
-      cy.contains('error').should('be.visible');
+      cy.contains('Username already taken').should('be.visible');
     });
   });
 });

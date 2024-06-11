@@ -1,19 +1,20 @@
-import { Router, Request, Response } from 'express';
-import { Client } from 'pg';
+import express, { Request, Response, Router } from 'express';
+import pg from 'pg';
+const { Client } = pg;
+
 
 interface User {
     username: string;
     password: string;
 }
 
-const router = Router();
+const router: Router = express.Router();
 const client = new Client({
-    connectionString: process.env.PGURI
+    connectionString: 'postgres://postgres:yupter@localhost:5432/postgres'
 });
 
 client.connect();
 
-// Register User
 router.post('/register', async (req: Request, res: Response) => {
     const { username, password } = req.body as User;
     try {
@@ -23,8 +24,8 @@ router.post('/register', async (req: Request, res: Response) => {
         }
         const insertQuery = await client.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, password]);
         return res.status(201).json(insertQuery.rows[0]);
-    } catch (error: unknown) { // Note the type `unknown` here
-        if (error instanceof Error) { // Type guard to check if it's an Error object
+    } catch (error: unknown) { 
+        if (error instanceof Error) { 
             console.error('Registration error:', error);
             return res.status(500).json({ message: 'Registration failed', error: error.message });
         } else {
@@ -35,13 +36,18 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 
-// Login User
+
 router.post('/login', async (req: Request, res: Response) => {
     const { username, password } = req.body as User;
     try {
-        const loginQuery = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+        const loginQuery = await client.query('SELECT user_id, username FROM users WHERE username = $1 AND password = $2', [username, password]);
         if (loginQuery.rows.length > 0) {
-            res.json({ message: "Login successful", user: loginQuery.rows[0] });
+            const user = loginQuery.rows[0];
+            res.json({
+                message: "Login successful",
+                userId: user.user_id,
+                username: user.username 
+            });
         } else {
             res.status(401).send('Invalid credentials');
         }

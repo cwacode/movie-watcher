@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="12" sm="8" md="4" class="mt-16">
+      <v-col cols="10" sm="8" md="6" lg="4" class="mt-16">
         <v-card>
           <v-card-title class="text-h4 text-center">{{ isLogin ? 'Login' : 'Register' }}</v-card-title>
           <v-card-text>
@@ -9,7 +9,7 @@
               <v-text-field v-model="form.username" data-cy="Username" label="Username" required></v-text-field>
               <v-text-field v-model="form.password" data-cy="Password" label="Password" required type="password"></v-text-field>
               <div class="button-group">
-                <v-btn type="submit" color="primary">{{ isLogin ? 'Log in' : 'Register' }}</v-btn>
+                <v-btn :disabled="!isFormValid" type="submit" color="primary">{{ isLogin ? 'Log in' : 'Register' }}</v-btn>
                 <v-btn color="secondary" @click="toggleForm">{{ isLogin ? 'Go to Register' : 'Go to Login' }}</v-btn>
               </div>
             </v-form>
@@ -31,10 +31,10 @@
   </v-container>
 </template>
 
+
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
-import { mapStores } from 'pinia';
 import { useAuthStore } from '../store/authStore';
 
 export default defineComponent({
@@ -57,16 +57,25 @@ export default defineComponent({
       this.isLogin = newPath.includes('/login');
     }
   },
+  computed: {
+    isFormValid() {
+      return this.form.username.length >= 2 && this.form.password.length >= 2;
+    }
+  },
   methods: {
     async submit() {
       const path = this.isLogin ? '/api/auth/login' : '/api/auth/register';
       try {
         const response = await axios.post(path, this.form);
-        if (response.status === 201) { // Assuming 201 is for successful registration
+        if (response.status === 201) {
           this.snackbar.text = "Successfully registered. Please log in.";
           this.snackbar.show = true;
           this.$router.push({ name: 'Login' });
-        } else if (response.status === 200) { // Assuming 200 is for successful login
+        } else if (response.status === 200) {
+          const authStore = useAuthStore();
+          const { username, userId } = response.data;
+          console.log('Logging in with user ID:', userId); // Debug log
+          authStore.login(username, userId);
           this.$router.push({ name: 'MoviePage' });
         }
       } catch (error) {
@@ -86,9 +95,6 @@ export default defineComponent({
       this.snackbar.show = false;
     }
   },
-  computed: {
-    ...mapStores(useAuthStore)
-  }
 });
 </script>
 

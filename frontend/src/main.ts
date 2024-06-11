@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
-import router from './router/router.ts';
+import router from './router/router';
 import { createPinia } from 'pinia';
-import { useAuthStore } from './store/authStore.ts';
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
