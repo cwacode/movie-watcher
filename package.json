@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "movie-watcher",
   "version": "1.0.0",
   "main": "index.js",
@@ -29,6 +30,9 @@
     "vuetify": "^3.6.8"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@babel/types": "^7.23.6",
     "@cypress/vite-dev-server": "^5.1.1",
     "@cypress/vue": "^3.1.2",

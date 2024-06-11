@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "esnext",
+    "module": "ES2020",
     "moduleResolution": "node",
     "lib": ["dom", "ESNext"],
     "esModuleInterop": true,
@@ -26,6 +26,7 @@
     "./frontend/src/**/*.vue",
     "./frontend/src/**/*.d.ts",
     "./backend/**/*.ts",
+    "./backend/src/**/*.ts",
     "cypress/**/*.ts"
   ]
 }

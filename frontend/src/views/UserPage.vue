@@ -44,6 +44,9 @@ import { Movie } from '../types';
 
 export default defineComponent({
   name: 'UserPage',
+  components: {
+    UserAndMovies
+  },
   data() {
     return {
       movies: [] as Movie[]
