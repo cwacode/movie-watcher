@@ -1,17 +1,12 @@
 <template>
   <v-container fluid>
-<<<<<<< Updated upstream
     <v-row justify="center" class="align-center my-8">
-        <span class="text-h3 text -center">
+        <span class="text-h3 text-center">
           All Movies
         </span>
     </v-row>
     <v-row justify="center">
       <v-col v-for="movie in movies" :key="movie.movie_id" cols="6" sm="4" md="3">
-=======
-    <v-row justify="center">
-      <v-col v-for="movie in movies" :key="movie.movie_id" cols="6" sm="4" md="3" style="max-width: 1200px;">
->>>>>>> Stashed changes
         <v-card elevation="5" class="text-center fill-height d-flex flex-column">
           <v-img :src="movie.image" alt="Movie image" cover></v-img>
           <v-spacer></v-spacer>
@@ -23,11 +18,7 @@
           </v-card-subtitle>
           <v-card-actions>
             <v-spacer></v-spacer>
-<<<<<<< Updated upstream
             <v-btn class="text-wrap" variant="outlined" color="pink" @click="addToFavorites(movie.movie_id)">
-=======
-            <v-btn variant="outlined" color="pink" @click="addToFavorites(movie.movie_id)">
->>>>>>> Stashed changes
               Add to Favorites
             </v-btn>
             <v-spacer></v-spacer>
@@ -44,11 +35,7 @@
 <script lang="ts">
 import axios from 'axios';
 import { defineComponent } from 'vue';
-<<<<<<< Updated upstream
 import { Movie } from '../types';
-=======
-import { Movie } from '@/types';
->>>>>>> Stashed changes
 import { useAuthStore } from '../store/authStore';
 
 
