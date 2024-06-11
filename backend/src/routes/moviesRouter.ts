@@ -7,7 +7,6 @@ const client = new Client({
 });
 client.connect();
 
-// Routes for movies, similar to users.js
 router.get('/', async (req: Request, res: Response) => {
     try {
         const { rows } = await client.query('SELECT * FROM movies');
@@ -18,7 +17,6 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
-// Example for adding a new movie
 router.post('/', async (req: Request, res: Response) => {
     const { title, director, releaseDate } = req.body as { title: string; director: string; releaseDate: string };
     try {

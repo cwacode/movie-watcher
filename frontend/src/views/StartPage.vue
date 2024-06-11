@@ -1,61 +1,90 @@
 <template>
-    <v-container>
-      <v-row justify="center">
-        <v-col cols="12" sm="8" md="4">
-          <v-card>
-            <v-card-title class="text-h5">{{ isLogin ? 'Login' : 'Register' }}</v-card-title>
-            <v-card-text>
-              <v-form @submit.prevent="submit">
-                <v-text-field v-model="form.username" label="Username" required></v-text-field>
-                <v-text-field v-model="form.password" label="Password" required type="password"></v-text-field>
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="4" class="mt-16">
+        <v-card>
+          <v-card-title class="text-h5">{{ isLogin ? 'Login' : 'Register' }}</v-card-title>
+          <v-card-text>
+            <v-form @submit.prevent="submit">
+              <v-text-field v-model="form.username" label="Username" required></v-text-field>
+              <v-text-field v-model="form.password" label="Password" required type="password"></v-text-field>
+              <div class="button-group">
                 <v-btn type="submit" color="primary">{{ isLogin ? 'Log in' : 'Register' }}</v-btn>
                 <v-btn color="secondary" @click="toggleForm">{{ isLogin ? 'Go to Register' : 'Go to Login' }}</v-btn>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import axios from 'axios';
-  import { useRouter } from 'vue-router';
-  
-  export default defineComponent({
+              </div>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-snackbar v-model="snackbar.show">
+      {{ snackbar.text }}
+      <v-btn color="black" class="white-text" @click="closeSnackbar">Close</v-btn>
+    </v-snackbar>
+  </v-container>
+</template>
 
-    setup() {
-      const router = useRouter();
-      const isLogin = ref(true);
-      const form = ref({
+<script lang="ts">
+import { defineComponent } from 'vue';
+import axios from 'axios';
+import { mapStores } from 'pinia';
+import { useAuthStore } from '../store/authStore';
+
+export default defineComponent({
+  name: 'StartPage',
+  data() {
+    return {
+      form: {
         username: '',
         password: ''
-      });
-  
-      const submit = async () => {
-        const path = isLogin.value ? '/api/auth/login' : '/api/auth/register';
-        try {
-          const response = await axios.post(path, form.value);
-          if (response.data) {
-            router.push({ name: 'Dashboard' }); // Redirect to a dashboard or home page
-          }
-        } catch (error: any) {
-          alert('Error: ' + (error.response?.data?.message || error.message));
-        }
-      };
-  
-      const toggleForm = () => {
-        isLogin.value = !isLogin.value;
-        router.push({ name: isLogin.value ? 'Login' : 'Register' });
-      };
-  
-      return { isLogin, form, submit, toggleForm };
+      },
+      isLogin: true,  // This will now be updated based on the route
+      snackbar: {
+        show: false,
+        text: ''
+      }
+    };
+  },
+  watch: {
+    '$route.path'(newPath) {
+      this.isLogin = newPath.includes('/login');
     }
-  });
-  </script>
-  
-  <style scoped>
-  /* Add your styles here if necessary */
-  </style>
-  
+  },
+  methods: {
+    async submit() {
+      const path = this.isLogin ? '/api/auth/login' : '/api/auth/register';
+      try {
+        const response = await axios.post(path, this.form);
+        if (response.data) {
+          this.snackbar.text = `Successfully ${this.isLogin ? 'logged in' : 'registered'}.`;
+          this.snackbar.show = true;
+          this.$router.push({ name: this.isLogin ? 'MoviePage' : 'Login' });
+        }
+      } catch (error) {
+        this.snackbar.text = `Failed ${this.isLogin ? 'logged in' : 'registered'}.`;
+        this.snackbar.show = true;
+      }
+    },
+    toggleForm() {
+      this.isLogin = !this.isLogin;
+      this.$router.push({ name: this.isLogin ? 'Login' : 'Register' });
+    },
+    closeSnackbar() {
+      this.snackbar.show = false;
+    }
+  },
+  computed: {
+    ...mapStores(useAuthStore)
+  }
+});
+</script>
+
+
+
+<style scoped>
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+</style>

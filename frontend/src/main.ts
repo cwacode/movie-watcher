@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
-import router from './router/router.js';
-
+import router from './router/router.ts';
+import { createPinia } from 'pinia';
+import { useAuthStore } from './store/authStore.ts';
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
@@ -11,6 +12,11 @@ import App from './App.vue';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3000/';
+
+router.afterEach((to) => {
+  const authStore = useAuthStore();
+  authStore.updateRoute(to.path);
+});
 
 
 const vuetify = createVuetify({
@@ -25,9 +31,10 @@ const vuetify = createVuetify({
   },
 });
 
+const pinia = createPinia();
 const app = createApp(App);
 
 app.use(router);
 app.use(vuetify);
-
+app.use(pinia);
 app.mount('#app');

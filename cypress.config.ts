@@ -16,8 +16,7 @@ export default defineConfig({
       password: "securePassword"
     },
     setupNodeEvents(on, config) {
-      // Implement node event listeners here
-      // Användbara för att till exempel lägga till plugins
+     
     },
   },
 });

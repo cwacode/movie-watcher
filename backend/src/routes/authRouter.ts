@@ -17,20 +17,23 @@ client.connect();
 router.post('/register', async (req: Request, res: Response) => {
     const { username, password } = req.body as User;
     try {
-        // Check if the user already exists
         const existsQuery = await client.query('SELECT * FROM users WHERE username = $1', [username]);
         if (existsQuery.rowCount && existsQuery.rowCount > 0) {
-            return res.status(409).send('Username already taken');
+            return res.status(409).json({ message: 'Username already taken' });
         }
-
-        // Insert new user if not exists
         const insertQuery = await client.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, password]);
-        res.status(201).json(insertQuery.rows[0]);
-    } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).send('Registration failed');
+        return res.status(201).json(insertQuery.rows[0]);
+    } catch (error: unknown) { // Note the type `unknown` here
+        if (error instanceof Error) { // Type guard to check if it's an Error object
+            console.error('Registration error:', error);
+            return res.status(500).json({ message: 'Registration failed', error: error.message });
+        } else {
+            console.error('Unexpected type of error:', error);
+            return res.status(500).json({ message: 'Registration failed', error: 'Unknown error' });
+        }
     }
 });
+
 
 // Login User
 router.post('/login', async (req: Request, res: Response) => {
