@@ -3,11 +3,11 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="4" class="mt-16">
         <v-card>
-          <v-card-title class="text-h5">{{ isLogin ? 'Login' : 'Register' }}</v-card-title>
+          <v-card-title class="text-h4 text-center">{{ isLogin ? 'Login' : 'Register' }}</v-card-title>
           <v-card-text>
             <v-form @submit.prevent="submit">
-              <v-text-field v-model="form.username" label="Username" required></v-text-field>
-              <v-text-field v-model="form.password" label="Password" required type="password"></v-text-field>
+              <v-text-field v-model="form.username" data-cy="Username" label="Username" required></v-text-field>
+              <v-text-field v-model="form.password" data-cy="Password" label="Password" required type="password"></v-text-field>
               <div class="button-group">
                 <v-btn type="submit" color="primary">{{ isLogin ? 'Log in' : 'Register' }}</v-btn>
                 <v-btn color="secondary" @click="toggleForm">{{ isLogin ? 'Go to Register' : 'Go to Login' }}</v-btn>
@@ -19,7 +19,14 @@
     </v-row>
     <v-snackbar v-model="snackbar.show">
       {{ snackbar.text }}
-      <v-btn color="black" class="white-text" @click="closeSnackbar">Close</v-btn>
+      <template v-slot:actions>
+        <v-btn
+          color="red"
+          @click="closeSnackbar"
+        >
+          Close
+        </v-btn>
+      </template>
     </v-snackbar>
   </v-container>
 </template>
@@ -38,7 +45,7 @@ export default defineComponent({
         username: '',
         password: ''
       },
-      isLogin: true,  // This will now be updated based on the route
+      isLogin: true,
       snackbar: {
         show: false,
         text: ''
@@ -55,19 +62,25 @@ export default defineComponent({
       const path = this.isLogin ? '/api/auth/login' : '/api/auth/register';
       try {
         const response = await axios.post(path, this.form);
-        if (response.data) {
-          this.snackbar.text = `Successfully ${this.isLogin ? 'logged in' : 'registered'}.`;
+        if (response.status === 201) { // Assuming 201 is for successful registration
+          this.snackbar.text = "Successfully registered. Please log in.";
           this.snackbar.show = true;
-          this.$router.push({ name: this.isLogin ? 'MoviePage' : 'Login' });
+          this.$router.push({ name: 'Login' });
+        } else if (response.status === 200) { // Assuming 200 is for successful login
+          this.$router.push({ name: 'MoviePage' });
         }
       } catch (error) {
-        this.snackbar.text = `Failed ${this.isLogin ? 'logged in' : 'registered'}.`;
-        this.snackbar.show = true;
+        if (axios.isAxiosError(error) && error.response) {
+          this.snackbar.text = error.response.data.message || 'An unexpected error occurred';
+          this.snackbar.show = true;
+        } else {
+          this.snackbar.text = 'An unexpected network error occurred';
+          this.snackbar.show = true;
+        }
       }
     },
     toggleForm() {
       this.isLogin = !this.isLogin;
-      this.$router.push({ name: this.isLogin ? 'Login' : 'Register' });
     },
     closeSnackbar() {
       this.snackbar.show = false;
@@ -78,6 +91,7 @@ export default defineComponent({
   }
 });
 </script>
+
 
 
 

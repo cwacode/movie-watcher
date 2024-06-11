@@ -11,10 +11,10 @@ export default defineConfig({
   },
   e2e: {
     baseUrl: 'http://localhost:5173',
-    env: {
-      email: "test@example.com",
-      password: "securePassword"
-    },
+    // env: {
+    //   username: "testuser",
+    //   password: "securePassword"
+    // },
     setupNodeEvents(on, config) {
      
     },

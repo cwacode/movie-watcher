@@ -1,18 +1,23 @@
 import { defineStore } from 'pinia';
 import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 interface AuthState {
   isLoggedIn: boolean;
   username: string | null;
-  currentRoute: string;
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     isLoggedIn: false,
     username: null,
-    currentRoute: useRoute().path // This won't be reactive; we'll handle reactivity differently.
   }),
+  getters: {
+    currentRoute: () => {
+      const route = useRoute();
+      return computed(() => route.path);
+    }
+  },
   actions: {
     login(username: string) {
       this.isLoggedIn = true;
@@ -21,9 +26,6 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.isLoggedIn = false;
       this.username = null;
-    },
-    updateRoute(path: string) {
-      this.currentRoute = path;
     }
   }
 });

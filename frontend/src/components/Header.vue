@@ -15,15 +15,15 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { useAuthStore } from '../store/authStore';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Header',
   setup() {
-    const authStore = useAuthStore();
+    const router = useRouter();
     const shouldShowHeader = computed(() => {
       const noHeaderRoutes = ['/', '/login', '/register'];
-      return !noHeaderRoutes.includes(authStore.currentRoute);
+      return !noHeaderRoutes.includes(router.currentRoute.value.path);
     });
 
     return { shouldShowHeader };

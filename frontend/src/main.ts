@@ -13,10 +13,10 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3000/';
 
-router.afterEach((to) => {
-  const authStore = useAuthStore();
-  authStore.updateRoute(to.path);
-});
+// router.afterEach((to) => {
+//   const authStore = useAuthStore();
+//   authStore.updateRoute(to.path);
+// });
 
 
 const vuetify = createVuetify({

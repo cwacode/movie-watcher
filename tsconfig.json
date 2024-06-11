@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "lib": ["dom", "esnext"],
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,7 +14,7 @@
     "jsx": "preserve",
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["node"],
+    "types": ["node", "vuetify"],
     "paths": {
       "@/*": ["./frontend/src/*"]
     },
@@ -28,6 +28,7 @@
     "./frontend/src/**/*.tsx",
     "./frontend/src/**/*.vue",
     "./frontend/src/**/*.d.ts",
-    "./backend/**/*.ts"
+    "./backend/**/*.ts",
+    "cypress/**/*.ts"
   ]
 }
