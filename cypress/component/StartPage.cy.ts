@@ -38,7 +38,6 @@ describe('StartPage Component Tests', () => {
       cy.get('[data-cy="Submit"]').contains('Register').click();
       cy.contains('Successfully registered').should('be.visible');
       cy.wait('@registerRequest');
-      cy.url().should('include', '/login');
     });
   });
 
@@ -47,13 +46,15 @@ describe('StartPage Component Tests', () => {
       cy.get('.header-component').should('not.exist');
     });
     it('Should fail to log in with incorrect credentials', () => {
-      cy.get('[data-cy="Title"]').should('contain', 'Login')
+      cy.get('[data-cy="Toggle"]').contains('Go to Login').click();
+      cy.get('[data-cy="Title"]').should('contain', 'Login');
       cy.get('[data-cy="Username"]').type('testuser');
       cy.get('[data-cy="Password"]').type('wrongPassword');
       cy.get('[data-cy="Submit"]').contains('Log in').click();
       cy.contains('Invalid credentials').should('be.visible');
     });
     it('Should successfully log in with valid credentials', () => {
+      cy.get('[data-cy="Toggle"]').contains('Go to Login').click();
       cy.get('[data-cy="Title"]').should('contain', 'Login')
       cy.get('[data-cy="Username"]').type('testuser');
       cy.get('[data-cy="Password"]').type('testpassword');

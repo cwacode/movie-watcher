@@ -20,6 +20,7 @@
     "component/**/*.ts",
     "e2e/**/*.ts",
     "cypress/**/*.ts",
-    "node_modules/cypress"
+    "node_modules/cypress",
+    "**/*.feature"
    ]
 }

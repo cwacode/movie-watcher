@@ -1,15 +1,8 @@
 import express, { Request, Response, Router } from 'express';
-import pg from 'pg';
 import { User } from '../types';
-
-const { Client } = pg;
+import client from '../database.js';
 
 const router: Router = express.Router();
-const client = new Client({
-    connectionString: 'postgres://postgres:yupter@localhost:5432/postgres'
-});
-
-client.connect();
 
 router.post('/register', async (req: Request, res: Response) => {
     const { username, password } = req.body as User;
@@ -30,9 +23,6 @@ router.post('/register', async (req: Request, res: Response) => {
         }
     }
 });
-
-
-
 
 router.post('/login', async (req: Request, res: Response) => {
     const { username, password } = req.body as User;

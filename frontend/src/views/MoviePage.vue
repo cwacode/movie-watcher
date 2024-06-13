@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center" class="align-center my-8">
-      <span class="text-h3 text-center">
+      <span class="text-h3 text-center" data-cy="Title">
         All Movies
       </span>
     </v-row>
@@ -57,7 +57,7 @@
 <script lang="ts">
 import axios from 'axios';
 import { defineComponent } from 'vue';
-import { Movie, SortKey } from '../../types';
+import { Movie, SortKey } from '../types';
 import { useAuthStore } from '../store/authStore';
 
 export default defineComponent({

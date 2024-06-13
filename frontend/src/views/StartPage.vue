@@ -67,7 +67,7 @@ export default defineComponent({
         if (response.status === 201) {
           this.snackbar.text = "Successfully registered. Please log in.";
           this.snackbar.show = true;
-          this.$router.push({ name: 'Login' });
+          this.toggleForm();
         } else if (response.status === 200) {
           const authStore = useAuthStore();
           const { username, userId } = response.data;

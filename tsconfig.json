@@ -27,6 +27,7 @@
     "./frontend/src/**/*.d.ts",
     "./backend/**/*.ts",
     "./backend/src/**/*.ts",
-    "cypress/**/*.ts"
+    "cypress/**/*.ts",
+    "**/*.feature"
   ]
 }
