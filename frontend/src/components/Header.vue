@@ -22,7 +22,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const shouldShowHeader = computed(() => {
-      const noHeaderRoutes = ['/', '/login', '/register'];
+      const noHeaderRoutes = ['/', '/login'];
       return !noHeaderRoutes.includes(router.currentRoute.value.path);
     });
 

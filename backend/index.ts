@@ -1,10 +1,10 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRouter from './src/routes/authRouter';
-import usersRouter from './src/routes/usersRouter';
-import moviesRouter from './src/routes/moviesRouter';
-import listRouter from './src/routes/listRouter';
+import authRouter from './src/routes/authRouter.js';
+import usersRouter from './src/routes/usersRouter.js';
+import moviesRouter from './src/routes/moviesRouter.js';
+import listRouter from './src/routes/listRouter.js';
 import pg from 'pg';
 dotenv.config();
 

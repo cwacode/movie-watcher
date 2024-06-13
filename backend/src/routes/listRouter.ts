@@ -2,13 +2,11 @@ import express, { Request, Response, Router } from 'express';
 import pg from 'pg';
 const { Client } = pg;
 
-
 const router: Router = express.Router();
 const client = new Client({
     connectionString: 'postgres://postgres:yupter@localhost:5432/postgres'
 });
 client.connect();
-
 
 router.get('/:userId', async (req: Request, res: Response) => {
     const { userId } = req.params;
@@ -24,21 +22,29 @@ router.get('/:userId', async (req: Request, res: Response) => {
     }
 });
 
-
-
+// Before inserting, check if it exists
 router.post('/:userId', async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
     const { movieId } = req.body as { movieId: number };
     if (isNaN(userId) || isNaN(movieId)) {
         return res.status(400).send('Invalid user ID or movie ID');
     }
+    const exists = await client.query(
+        'SELECT 1 FROM user_movies WHERE user_id = $1 AND movie_id = $2',
+        [userId, movieId]
+    );
+    if (exists.rowCount && exists.rowCount > 0) {
+        return res.status(409).send('Movie already added to favorites');
+    }
+    // If not, proceed to insert
     try {
         const result = await client.query(
             'INSERT INTO user_movies (user_id, movie_id) VALUES ($1, $2) RETURNING *',
-            [userId, movieId] 
+            [userId, movieId]
         );
         if (result.rowCount && result.rowCount > 0) {
             res.status(201).json(result.rows[0]);
+            console.log('Added to list', result.rows[0])
         } else {
             res.status(404).send('Failed to add movie to user list');
         }
@@ -48,6 +54,7 @@ router.post('/:userId', async (req: Request, res: Response) => {
     }
 });
 
+
 router.delete('/:userId/:movieId', async (req: Request, res: Response) => {
     const { userId, movieId } = req.params;
     try {
@@ -56,7 +63,8 @@ router.delete('/:userId/:movieId', async (req: Request, res: Response) => {
             [parseInt(userId), parseInt(movieId)]
         );
         if (result.rows.length) {
-            res.status(200).json({ message: "Movie removed from list successfully.", deletedMovie: result.rows[0] });
+            res.status(200).json({ message: "Movie removed from list successfully", deletedMovie: result.rows[0] });
+            console.log('Removed from list', result.rows[0])
         } else {
             res.status(404).send('Movie not found in user list.');
         }

@@ -1,5 +1,5 @@
 <template>
-  <v-layout full-height full-width>
+  <v-layout fill-height fill-width style="min-height: 100vh;">
     <Header />
     <v-main>
       <router-view></router-view>

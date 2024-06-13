@@ -4,5 +4,5 @@ export interface Movie {
     name: string;
     year: number;
     genre: string;
-    image?: any;
+    image: string;
   }

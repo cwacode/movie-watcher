@@ -1,22 +1,17 @@
 import { createApp } from 'vue';
-import router from './router/router';
 import { createPinia } from 'pinia';
-import 'vuetify/styles';
+import router from './router/router';
+import axios from 'axios';
+import App from './App.vue';
+
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
-
-import App from './App.vue';
-import axios from 'axios';
+import 'vuetify/styles';
+import '@mdi/font/css/materialdesignicons.css'
 
 axios.defaults.baseURL = 'http://localhost:3000/';
-
-// router.afterEach((to) => {
-//   const authStore = useAuthStore();
-//   authStore.updateRoute(to.path);
-// });
-
 
 const vuetify = createVuetify({
   components,

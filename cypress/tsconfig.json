@@ -8,6 +8,7 @@
     "jsx": "preserve",
     "allowJs": true,
     "strict": true,
+    "noEmit": true,
     "baseUrl": "../",
     "paths": {
       "@/*": ["src/*"]
@@ -17,6 +18,8 @@
   "include": [
     "**/*.ts",
     "component/**/*.ts",
-    "e2e/**/*.ts"
+    "e2e/**/*.ts",
+    "cypress/**/*.ts",
+    "node_modules/cypress"
    ]
 }

@@ -1,12 +1,8 @@
 import express, { Request, Response, Router } from 'express';
 import pg from 'pg';
+import { User } from '../types';
+
 const { Client } = pg;
-
-
-interface User {
-    username: string;
-    password: string;
-}
 
 const router: Router = express.Router();
 const client = new Client({
@@ -26,8 +22,6 @@ router.post('/register', async (req: Request, res: Response) => {
         return res.status(201).json(insertQuery.rows[0]);
     } catch (error: unknown) { 
         if (error instanceof Error) { 
-    } catch (error: unknown) { 
-        if (error instanceof Error) { 
             console.error('Registration error:', error);
             return res.status(500).json({ message: 'Registration failed', error: error.message });
         } else {
@@ -44,7 +38,6 @@ router.post('/login', async (req: Request, res: Response) => {
     const { username, password } = req.body as User;
     try {
         const loginQuery = await client.query('SELECT user_id, username FROM users WHERE username = $1 AND password = $2', [username, password]);
-        const loginQuery = await client.query('SELECT user_id, username FROM users WHERE username = $1 AND password = $2', [username, password]);
         if (loginQuery.rows.length > 0) {
             const user = loginQuery.rows[0];
             res.json({
@@ -52,12 +45,7 @@ router.post('/login', async (req: Request, res: Response) => {
                 userId: user.user_id,
                 username: user.username 
             });
-            const user = loginQuery.rows[0];
-            res.json({
-                message: "Login successful",
-                userId: user.user_id,
-                username: user.username 
-            });
+            console.log('Login successful')
         } else {
             res.status(401).send('Invalid credentials');
         }

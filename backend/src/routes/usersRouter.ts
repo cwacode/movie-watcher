@@ -1,7 +1,8 @@
 import express, { Request, Response, Router } from 'express';
 import pg from 'pg';
-const { Client } = pg;
+import { User } from '../types';
 
+const { Client } = pg;
 
 const router: Router = express.Router();
 const client = new Client({
@@ -20,10 +21,11 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const { username, password } = req.body as { username: string; password: string };
+    const { username, password } = req.body as User;
     try {
         const result = await client.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, password]);
         res.status(201).json(result.rows[0]);
+        console.log('User Added')
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Server error');
