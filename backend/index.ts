@@ -2,7 +2,6 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRouter from './src/routes/authRouter.js';
-import usersRouter from './src/routes/usersRouter.js';
 import moviesRouter from './src/routes/moviesRouter.js';
 import listRouter from './src/routes/listRouter.js';
 dotenv.config();
@@ -17,7 +16,6 @@ app.use(cors({
 }));
 app.use(express.static('public'));
 app.use(express.json());
-app.use('/api/users', usersRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/list', listRouter);
